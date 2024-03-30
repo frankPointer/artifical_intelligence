@@ -38,7 +38,27 @@ public class ID3 {
     }
 
 
-    public void getTestData(String filePath) throws IOException {
+
+    public double getMaxInformationGain() {
+        double ret = 0;
+        for (String string : informationGain.keySet()) {
+            if (informationGain.get(string) > ret) {
+                ret = informationGain.get(string);
+            }
+        }
+
+        return ret;
+    }
+
+
+    /**
+     * 从文件读取最原始的测试数据，
+     * 将属性名存到 this.attributes
+     * 将每一行的数据存到 this.originData
+     *
+     * @param filePath 文件路径
+     */
+    public void readOriginData(String filePath) throws IOException {
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
             String string;
@@ -54,108 +74,130 @@ public class ID3 {
         // 将测试数据的第一行也就是属性名，全部保存起来
         attributes.addAll(Arrays.asList(originData.get(0)));
         originData.remove(0);
-        this.total = originData.size();
+
+        // 处理数据
+        processData();
     }
 
-    public void getData(String filePath) {
-        int i = 0; // 用来标记读到了哪一行
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+    /**
+     * 根据传如的测试数据，筛选出包含 label 的测试数据，然后将这些数据赋给 this.originData、this.attributes
+     * 在构建决策树的时候用
+     *
+     * @param originData 测试数据
+     * @param attributes 属性名集合
+     * @param attribute  属性名
+     * @param label      attributes 的具体标签名
+     */
+    public void extendOriginData(ArrayList<String[]> originData, ArrayList<String> attributes, String attribute, String label) {
+        // 先找到 label 在一行中的位置
+        int index = attributes.indexOf(attribute);
 
-            String str;
-            while ((str = bufferedReader.readLine()) != null) {
-                String[] words = str.split(",");
+        for (String[] lineData : originData) {
+            if (lineData[index].equals(label)) {
 
-                // 一行的数据数
-                int size = words.length;
+                String[] newLineData = removeElement(lineData, index);
+                this.originData.add(newLineData);
+            }
+        }
 
-                // 存储标签以及其对应的结果
-                Map<String, int[]> label;
+        // 除去此属性
+        attributes.remove(attribute);
+        this.attributes = attributes;
+
+        // 处理数据
+        processData();
+    }
+
+    private void processData() {
+
+        // 获取数据总量，只能在这里获取，这样后面才能递归计算
+        this.total = originData.size();
+
+        // 用来标记读到了哪一行
+
+        for (String[] words : originData) {
 
 
-                // 对第一行进行的操作
-                if (i == 0) {
-                    // 保存属性名
-                    attributes.addAll(Arrays.asList(words));
+            // 一行的数据数
+            int size = words.length;
+
+            // 存储标签以及其对应的结果
+            Map<String, int[]> label;
+
+
+            // 对第二行以及之后的数据进行操作
+
+            for (int k = 0; k < words.length; k++) {
+                String word = words[k];
+                int[] num = {0, 0};
+
+                // 判断这一行数据的最终结果是true or false
+                boolean flag = words[size - 1].equals(attributes.get(size - 1));
+
+                if (flag) {
+                    trueNum++;
                 } else {
-                    // 对第二行以及之后的数据进行操作
-
-                    for (int k = 0; k < words.length; k++) {
-                        String word = words[k];
-                        int[] num = {0, 0};
-
-                        // 判断这一行数据的最终结果是true or false
-                        boolean flag = words[size - 1].equals(attributes.get(size - 1));
-
-                        if (flag) {
-                            trueNum++;
-                        } else {
-                            falseNum++;
-                        }
-
-                        //todo 先判断是否存在，然后再存进去
-
-                        // 先判断这个属性之前是否存过
-                        if (data.containsKey(attributes.get(k))) {
-
-                            /*
-                            属性存在，拿到属性下的标签map
-                             */
-                            label = data.get(attributes.get(k));
-
-                            /*
-                            因为之前存在，所以需要判断标签是否存在
-                            存在的话先得到原来的数组进行加减
-                             */
-                            if (label.containsKey(word)) {
-                                int[] ints = label.get(word);
-
-                                if (flag) {
-                                    ints[0]++;
-                                } else {
-                                    ints[1]++;
-                                }
-
-                                label.put(word, ints);
-                            } else {
-                                if (flag) {
-                                    num[0] = 1;
-                                } else {
-                                    num[1] = 1;
-                                }
-
-                                label.put(word, num);
-                            }
-
-                            data.put(attributes.get(k), label);
-                        } else {
-
-                            label = new HashMap<>();
-
-                            if (flag) {
-                                num[0] = 1;
-                            } else {
-                                num[1] = 1;
-                            }
-
-                            label.put(word, num);
-                            data.put(attributes.get(k), label);
-                        }
-
-                    }
-
+                    falseNum++;
                 }
 
-                i++;
+                // 先判断这个属性之前是否存过
+                if (data.containsKey(attributes.get(k))) {
 
+                    /*
+                    属性存在，拿到属性下的标签map
+                     */
+                    label = data.get(attributes.get(k));
+
+                    /*
+                    因为之前存在，所以需要判断标签是否存在
+                    存在的话先得到原来的数组进行加减
+                     */
+                    if (label.containsKey(word)) {
+                        int[] ints = label.get(word);
+
+                        if (flag) {
+                            ints[0]++;
+                        } else {
+                            ints[1]++;
+                        }
+
+                        label.put(word, ints);
+                    } else {
+                        if (flag) {
+                            num[0] = 1;
+                        } else {
+                            num[1] = 1;
+                        }
+
+                        label.put(word, num);
+                    }
+
+                    data.put(attributes.get(k), label);
+                } else {
+                    // 属性不存在，直接创建一个新的 map
+
+                    label = new HashMap<>();
+
+                    if (flag) {
+                        num[0] = 1;
+                    } else {
+                        num[1] = 1;
+                    }
+
+                    label.put(word, num);
+                    data.put(attributes.get(k), label);
+                }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
-        total = i - 1;
+
+        // 处理完数据之后就开始计算熵
+        calculateEntropyGain();
     }
 
-    public void getEntropy() {
+    /**
+     * 计算熵、信息增益
+     */
+    private void calculateEntropyGain() {
 
         int size = attributes.size();
         trueNum /= size;
@@ -172,15 +214,53 @@ public class ID3 {
 
             this.informationGain.put(attribute, informationGain);
         }
+
+        this.informationGain.remove(attributes.get(attributes.size() - 1));
+
     }
 
     //todo 熵计算没有问题，就差构建决策树
 
-    public static void main(String[] args) {
+    private String[] removeElement(String[] array, int position) {
+        if (position < 0 || position >= array.length) {
+            // 无效的位置，返回原始数组
+            return array;
+        }
+
+        String[] newArray = new String[array.length - 1];
+
+        // 复制位于固定位置之前的元素
+        System.arraycopy(array, 0, newArray, 0, position);
+
+        // 复制位于固定位置之后的元素
+        if (array.length - (position + 1) >= 0)
+            System.arraycopy(array, position + 1, newArray, position + 1 - 1, array.length - (position + 1));
+
+        return newArray;
+    }
+
+    public static void main(String[] args) throws IOException {
         ID3 id3 = new ID3();
 
         String filePath = "resources/test_data.txt";
-        id3.getData(filePath);
-        id3.getEntropy();
+        id3.readOriginData(filePath);
+
+        Map<String, Double> informationGain = id3.informationGain;
+
+        System.out.println("max = " + id3.getMaxInformationGain());
+        for (String string : informationGain.keySet()) {
+            System.out.println(string + " = " + informationGain.get(string));
+        }
+
+        System.out.println("------------------------");
+        ID3 id31 = new ID3();
+        id31.extendOriginData(id3.originData, id3.attributes, "纹理", "清晰");
+
+        System.out.println("max = " + id31.getMaxInformationGain());
+        for (String string : id31.informationGain.keySet()) {
+            System.out.println(string + " = " + id31.informationGain.get(string));
+        }
     }
+
+
 }
