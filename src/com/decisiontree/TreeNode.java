@@ -1,6 +1,8 @@
 package com.decisiontree;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @auther: pointer
@@ -10,8 +12,22 @@ import java.util.ArrayList;
 public class TreeNode {
     private String name;
 
+    ArrayList<String> label;
+    ArrayList<TreeNode> childNodes;
+
+
     public TreeNode(String name) {
         this.name = name;
+        this.label = null;
+        this.childNodes = null;
+    }
+
+    public TreeNode(ID3 id3) {
+        this.name = id3.getMaxInformationGain();
+        this.label = new ArrayList<>();
+        this.childNodes = new ArrayList<>();
+
+        this.label.addAll(id3.data.get(name).keySet());
     }
 
     public String getName() {
@@ -22,9 +38,73 @@ public class TreeNode {
         this.name = name;
     }
 
-    // 与子节点之间的属性值
-    ArrayList<String> attributes = new ArrayList<>();
+    public static TreeNode createDecisionTree(ID3 id3) {
 
-    // 子节点
-    ArrayList<TreeNode> childNodes = new ArrayList<>();
+        if (id3.entropy == 0) {
+            return new TreeNode(id3.originData.get(id3.originData.size() - 1)[id3.attributes.size() - 1]);
+        }
+        TreeNode treeNode = new TreeNode(id3);
+
+        for (String label : treeNode.label) {
+            ID3 newId3 = new ID3(id3.originData, id3.attributes, treeNode.getName(), label);
+            treeNode.childNodes.add(createDecisionTree(newId3));
+        }
+
+        return treeNode;
+    }
+
+    // 层序遍历
+   public void levelOrderTraversal() {
+
+       Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(this);
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            StringBuilder levelNodes = new StringBuilder();
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode current = queue.poll();
+                levelNodes.append(current.name).append(" ");
+
+                if (current.childNodes != null) {
+                    for (TreeNode child : current.childNodes) {
+                        queue.offer(child);
+                    }
+                }
+            }
+
+            System.out.println(levelNodes.toString().trim());
+        }
+    }
+    // 层序遍历输出属性
+    public void levelOrderTraversalAttributes() {
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(this);
+
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            StringBuilder levelAttributes = new StringBuilder();
+
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode current = queue.poll();
+
+                if (current.label != null) {
+                    for (String attribute : current.label) {
+                        levelAttributes.append(attribute).append(" ");
+                    }
+                }
+
+                if (current.childNodes != null) {
+                    for (TreeNode child : current.childNodes) {
+                        queue.offer(child);
+                    }
+                }
+            }
+
+            System.out.println(levelAttributes.toString().trim());
+        }
+    }
+
 }

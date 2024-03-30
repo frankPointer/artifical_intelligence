@@ -26,58 +26,7 @@ public class ID3 {
     public double trueNum;
     public double falseNum;
 
-    public ID3() {
-        attributes = new ArrayList<>();
-        informationGain = new HashMap<>();
-        originData = new ArrayList<>();
-        data = new HashMap<>();
-        entropy = 0;
-        total = 0;
-        trueNum = 0;
-        falseNum = 0;
-    }
 
-
-
-    public double getMaxInformationGain() {
-        double ret = 0;
-        for (String string : informationGain.keySet()) {
-            if (informationGain.get(string) > ret) {
-                ret = informationGain.get(string);
-            }
-        }
-
-        return ret;
-    }
-
-
-    /**
-     * 从文件读取最原始的测试数据，
-     * 将属性名存到 this.attributes
-     * 将每一行的数据存到 this.originData
-     *
-     * @param filePath 文件路径
-     */
-    public void readOriginData(String filePath) throws IOException {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-            String string;
-            while ((string = bufferedReader.readLine()) != null) {
-                String[] words = string.split(",");
-                originData.add(words);
-            }
-            bufferedReader.close();
-        } catch (IOException e) {
-            throw new IOException();
-        }
-
-        // 将测试数据的第一行也就是属性名，全部保存起来
-        attributes.addAll(Arrays.asList(originData.get(0)));
-        originData.remove(0);
-
-        // 处理数据
-        processData();
-    }
 
     /**
      * 根据传如的测试数据，筛选出包含 label 的测试数据，然后将这些数据赋给 this.originData、this.attributes
@@ -88,7 +37,16 @@ public class ID3 {
      * @param attribute  属性名
      * @param label      attributes 的具体标签名
      */
-    public void extendOriginData(ArrayList<String[]> originData, ArrayList<String> attributes, String attribute, String label) {
+    public ID3(ArrayList<String[]> originData, ArrayList<String> attributes, String attribute, String label) {
+        this.attributes = new ArrayList<>();
+        this.informationGain = new HashMap<>();
+        this.originData = new ArrayList<>();
+        this.data = new HashMap<>();
+        this.entropy = 0;
+        this.total = 0;
+        this.trueNum = 0;
+        this.falseNum = 0;
+
         // 先找到 label 在一行中的位置
         int index = attributes.indexOf(attribute);
 
@@ -101,11 +59,63 @@ public class ID3 {
         }
 
         // 除去此属性
-        attributes.remove(attribute);
-        this.attributes = attributes;
+
+        this.attributes.addAll(attributes);
+        this.attributes.remove(attribute);
 
         // 处理数据
         processData();
+    }
+
+    /**
+     * 从文件读取最原始的测试数据，
+     * 将属性名存到 this.attributes
+     * 将每一行的数据存到 this.originData
+     *
+     * @param filePath 文件路径
+     */
+    public ID3(String filePath) throws IOException {
+        this.attributes = new ArrayList<>();
+        this.informationGain = new HashMap<>();
+        this.originData = new ArrayList<>();
+        this.data = new HashMap<>();
+        this.entropy = 0;
+        this.total = 0;
+        this.trueNum = 0;
+        this.falseNum = 0;
+
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+            String string;
+            while ((string = bufferedReader.readLine()) != null) {
+                String[] words = string.split(",");
+                this.originData.add(words);
+            }
+            bufferedReader.close();
+        } catch (IOException e) {
+            throw new IOException();
+        }
+
+        // 将测试数据的第一行也就是属性名，全部保存起来
+        this.attributes.addAll(Arrays.asList(originData.get(0)));
+        this.originData.remove(0);
+
+        // 处理数据
+        processData();
+
+    }
+
+    public String getMaxInformationGain() {
+        double temp = 0;
+        String str = null;
+        for (String string : informationGain.keySet()) {
+            if (informationGain.get(string) > temp) {
+                temp = informationGain.get(string);
+                str = string;
+            }
+        }
+
+        return str;
     }
 
     private void processData() {
@@ -221,6 +231,7 @@ public class ID3 {
 
     //todo 熵计算没有问题，就差构建决策树
 
+
     private String[] removeElement(String[] array, int position) {
         if (position < 0 || position >= array.length) {
             // 无效的位置，返回原始数组
@@ -239,28 +250,7 @@ public class ID3 {
         return newArray;
     }
 
-    public static void main(String[] args) throws IOException {
-        ID3 id3 = new ID3();
 
-        String filePath = "resources/test_data.txt";
-        id3.readOriginData(filePath);
-
-        Map<String, Double> informationGain = id3.informationGain;
-
-        System.out.println("max = " + id3.getMaxInformationGain());
-        for (String string : informationGain.keySet()) {
-            System.out.println(string + " = " + informationGain.get(string));
-        }
-
-        System.out.println("------------------------");
-        ID3 id31 = new ID3();
-        id31.extendOriginData(id3.originData, id3.attributes, "纹理", "清晰");
-
-        System.out.println("max = " + id31.getMaxInformationGain());
-        for (String string : id31.informationGain.keySet()) {
-            System.out.println(string + " = " + id31.informationGain.get(string));
-        }
-    }
 
 
 }
