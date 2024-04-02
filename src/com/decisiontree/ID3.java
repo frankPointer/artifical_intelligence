@@ -6,6 +6,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * @auther: pointer
+ * @Date: 2024-03-29-11:22
+ * @Description: 用于存储读取决策树的数据并
+ * 调用 Entropy 计算熵
+ * 调用 TreeNode 创建决策树
+ */
 public class ID3 {
 
     // 储存所有的属性名
@@ -228,8 +236,6 @@ public class ID3 {
         this.informationGain.remove(attributes.get(attributes.size() - 1));
 
     }
-
-    //todo 熵计算没有问题，就差构建决策树
 
 
     private String[] removeElement(String[] array, int position) {

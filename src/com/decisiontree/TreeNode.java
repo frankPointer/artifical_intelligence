@@ -38,13 +38,20 @@ public class TreeNode {
         this.name = name;
     }
 
+    /**
+     * 创建决策树
+     * @param id3 存储决策树数据的类
+     * @return 决策树的根节点
+     */
     public static TreeNode createDecisionTree(ID3 id3) {
 
+        // 熵为0，就不需要再计算了
         if (id3.entropy == 0) {
             return new TreeNode(id3.originData.get(id3.originData.size() - 1)[id3.attributes.size() - 1]);
         }
         TreeNode treeNode = new TreeNode(id3);
 
+        // 读取节点包含的标签，然后根据标签创建对应的子节点
         for (String label : treeNode.label) {
             ID3 newId3 = new ID3(id3.originData, id3.attributes, treeNode.getName(), label);
             treeNode.childNodes.add(createDecisionTree(newId3));

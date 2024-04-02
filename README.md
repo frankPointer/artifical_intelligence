@@ -1,5 +1,20 @@
 # 决策树
+
+项目调用流程：
+
+1. 给出测试文件路径：filePath
+2. 调用 ID3 的构建方法：`public ID3(String filePath)`
+   1. 读取文件
+   2. 处理文件
+   3. 调用 Entropy 类计算数据的熵
+3. 使用 `TreeNode.createDecision()` 创建决策树
+   1. 根据传入的 id3 创建节点
+   2. 创建子节点的时候，使用 ID3 的第二个构造方法：`public ID3(ArrayList<String[]> originData, ArrayList<String> attributes, String attribute, String label)`
+      继承其他ID3 的数据，并加一些限制条件
+
+
 根据测试数据输出结果如下：
+
 ```java
 public static void main(String[] args) throws IOException {
 
