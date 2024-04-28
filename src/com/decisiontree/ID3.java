@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @auther: pointer
  * @Date: 2024-03-29-11:22
- * @Description: 用于存储读取决策树的数据并
+ * @Description: 用于存储读取决策树的数据
  * 调用 Entropy 计算熵
  * 调用 TreeNode 创建决策树
  */
@@ -33,7 +33,6 @@ public class ID3 {
     public double total;
     public double trueNum;
     public double falseNum;
-
 
 
     /**
@@ -255,8 +254,4 @@ public class ID3 {
 
         return newArray;
     }
-
-
-
-
 }

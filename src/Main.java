@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        String filePath = "resources/test_data.txt";
+        String filePath = "resources/decision_tree_origin_data.txt";
         ID3 id3 = new ID3(filePath);
 
         TreeNode decisionTree = TreeNode.createDecisionTree(id3);

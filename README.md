@@ -45,3 +45,15 @@ public static void main(String[] args) throws IOException {
 图片数据如下
 ![](https://picgo-1314080015.cos.ap-nanjing.myqcloud.com/PIctures/202403301756268.png)
 
+# 遗传算法
+
+**优胜劣汰**
+
+变异概率、交叉概率都是自己设定的
+
+适应度：适应度高个体越强，算法目的就是找到适应度最大的个体
+
+交叉算子：指导书的是错的，具体方法看这个 https://www.keyangou.com/topic/1143
+
+## 实验目标
+**找到一个路径，从某个城市出发经过所有城市后回到这个城市的所走的路最小**
