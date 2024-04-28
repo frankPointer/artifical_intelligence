@@ -8,7 +8,7 @@ package com.genetic;
 public class Individual {
     private int[] chromosome;
     private double fitness;
-
+    private double chooseRate;
 
     public Individual(int[] chromosome) {
 
@@ -44,4 +44,11 @@ public class Individual {
         this.fitness = fitness;
     }
 
+    public void setChooseRate(double chooseRate) {
+        this.chooseRate = chooseRate;
+    }
+
+    public double getChooseRate() {
+        return chooseRate;
+    }
 }

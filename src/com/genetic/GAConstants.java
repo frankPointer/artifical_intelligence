@@ -5,13 +5,16 @@ package com.genetic;
  * @Description: 里面是遗传算法会用到的一些常量
  */
 public class GAConstants {
-    public final static int CHROMOSOME_LENGTH = 7;
+    public final static int CHROMOSOME_LENGTH = 8;
 
+    // 种群数量
+    public final static int INDIVIDUAL_NUM = 100;
     // 交叉率
-    public final static double CROSSOVER_RATE = 1;
+    public final static double CROSSOVER_RATE = 0.9;
     // 变异率
     public final static double MUTATION_RATE = 0.05;
-
+    // 锦标赛大小
+    public final static int TOURNAMENT_SIZE = 5;
     private final static int[][] DISTANCE_MATRIX = {
             {0, 49, 25, 19, 63, 74, 26, 39},
             {49, 0, 26, 48, 65, 36, 42, 55},
