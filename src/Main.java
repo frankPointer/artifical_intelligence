@@ -1,5 +1,4 @@
-import com.decisiontree.ID3;
-import com.decisiontree.TreeNode;
+import com.genetic.Individual;
 
 import java.io.IOException;
 
@@ -8,17 +7,9 @@ import java.io.IOException;
  * @Description:
  */
 public class Main {
-    public static void main(String[] args) throws IOException {
-
-        String filePath = "resources/decision_tree_origin_data.txt";
-        ID3 id3 = new ID3(filePath);
-
-        TreeNode decisionTree = TreeNode.createDecisionTree(id3);
-
-        decisionTree.levelOrderTraversal();
-
-        System.out.println("----------------------------");
-
-        decisionTree.levelOrderTraversalAttributes();
+    public static void main(String[] args) {
+        int[] test = {0, 1, 2, 3, 4, 5, 6};
+        Individual individual = new Individual(test);
+        System.out.println(individual.getFitness());
     }
 }
