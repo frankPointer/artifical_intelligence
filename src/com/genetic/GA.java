@@ -48,7 +48,7 @@ public class GA {
     private static Individual[] performCrossover(Individual[] parents) {
         int numParents = parents.length;
 
-        Individual[] nextGeneration = new Individual[numParents * GAConstants.INDIVIDUAL_NUM];
+        Individual[] nextGeneration = new Individual[numParents];
 
         for (int i = 0; i < numParents; i += 2) {
             Individual parent1 = parents[i];
@@ -131,6 +131,9 @@ public class GA {
                 index = endIndex + 1;
             }
 
+            if (index >= length) {
+                index = 0;
+            }
             if (!containsGene(childChromosome, parent2.getChromosome(), i, startIndex, endIndex)) {
                 childChromosome[index] = parent2.getChromosome()[i];
                 index++;
@@ -143,9 +146,9 @@ public class GA {
     private static boolean containsGene(int[] childChromosome, int[] chromosome, int index, int startIndex, int endIndex) {
         for (int i = startIndex; i <= endIndex; i++) {
             if (childChromosome[i] == chromosome[index]) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 }

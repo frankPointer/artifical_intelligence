@@ -29,20 +29,22 @@ public class GAConstants {
     /**
      *
      * @param chromosome 路径序列
-     * @return 适应度
+     * @return 距离值
      */
-    public static double getFitness(int[] chromosome) {
-        double length = 0;
+    public static int getDistance(int[] chromosome) {
+        int distance = 0;
 
         for (int i = 0; i < CHROMOSOME_LENGTH; i++) {
             if (i < CHROMOSOME_LENGTH - 1) {
-                length += DISTANCE_MATRIX[chromosome[i]][chromosome[i] + 1];
+
+                distance += DISTANCE_MATRIX[chromosome[i]][chromosome[i+1]];
             } else {
-                length += DISTANCE_MATRIX[chromosome[i]][chromosome[0]];
+
+                distance += DISTANCE_MATRIX[chromosome[i]][chromosome[0]];
             }
         }
 
-        System.out.println(length);
-        return 1 / length;
+
+        return distance;
     }
 }

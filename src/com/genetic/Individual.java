@@ -6,9 +6,9 @@ package com.genetic;
  * @Description: 遗传算法中，种群中的个体
  */
 public class Individual {
-    private int[] chromosome;
-    private double fitness;
-    private double chooseRate;
+    private final int[] chromosome;
+    private final double fitness;
+    private final int distance;
 
     public Individual(int[] chromosome) {
 
@@ -17,38 +17,22 @@ public class Individual {
             throw new IllegalArgumentException("chromosome length expected:" + GAConstants.CHROMOSOME_LENGTH);
         }
         this.chromosome = chromosome;
-        this.fitness = GAConstants.getFitness(chromosome);
+        this.distance = GAConstants.getDistance(chromosome);
+        this.fitness = 1 / (double) distance;
     }
-
-
-    public Individual(int[] chromosome, int fitness) {
-        this.chromosome = chromosome;
-        this.fitness = fitness;
-    }
-
 
     public int[] getChromosome() {
         return chromosome;
     }
 
 
-    public void setChromosome(int[] chromosome) {
-        this.chromosome = chromosome;
-    }
+
 
     public double getFitness() {
         return fitness;
     }
 
-    public void setFitness(double fitness) {
-        this.fitness = fitness;
-    }
-
-    public void setChooseRate(double chooseRate) {
-        this.chooseRate = chooseRate;
-    }
-
-    public double getChooseRate() {
-        return chooseRate;
+    public int getDistance() {
+        return distance;
     }
 }
