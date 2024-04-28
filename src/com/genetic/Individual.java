@@ -11,8 +11,13 @@ public class Individual {
 
 
     public Individual(int[] chromosome) {
-       this.chromosome = chromosome;
-       this.fitness = GAConstants.getFitness(chromosome);
+
+        // 当传入的染色体长度不对时候，抛出异常
+        if (chromosome.length != GAConstants.CHROMOSOME_LENGTH) {
+            throw new IllegalArgumentException("chromosome length expected:" + GAConstants.CHROMOSOME_LENGTH);
+        }
+        this.chromosome = chromosome;
+        this.fitness = GAConstants.getFitness(chromosome);
     }
 
 

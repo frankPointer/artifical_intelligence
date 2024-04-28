@@ -7,6 +7,11 @@ package com.genetic;
 public class GAConstants {
     public final static int CHROMOSOME_LENGTH = 7;
 
+    // 交叉率
+    public final static double CROSSOVER_RATE = 1;
+    // 变异率
+    public final static double MUTATION_RATE = 0.05;
+
     private final static int[][] DISTANCE_MATRIX = {
             {0, 49, 25, 19, 63, 74, 26, 39},
             {49, 0, 26, 48, 65, 36, 42, 55},
@@ -18,6 +23,11 @@ public class GAConstants {
             {39, 55, 49, 62, 54, 65, 47, 0}
     };
 
+    /**
+     *
+     * @param chromosome 路径序列
+     * @return 适应度
+     */
     public static double getFitness(int[] chromosome) {
         double length = 0;
 

@@ -8,7 +8,7 @@ import java.io.IOException;
  */
 public class Main {
     public static void main(String[] args) {
-        int[] test = {0, 1, 2, 3, 4, 5, 6};
+        int[] test = {0, 1, 2, 3, 4, 5, 6,8,9};
         Individual individual = new Individual(test);
         System.out.println(individual.getFitness());
     }
