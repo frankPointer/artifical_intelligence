@@ -27,23 +27,20 @@ public class GAConstants {
     };
 
     /**
+     * 计算染色体（路径序列）的总距离。
      *
-     * @param chromosome 路径序列
-     * @return 距离值
+     * @param chromosome 表示路径序列的整数数组，其中每个元素代表一个城市的索引。
+     * @return 返回路径序列的总距离。
      */
     public static int getDistance(int[] chromosome) {
         int distance = 0;
+        int chromosomeLength = chromosome.length;
 
-        for (int i = 0; i < CHROMOSOME_LENGTH; i++) {
-            if (i < CHROMOSOME_LENGTH - 1) {
-
-                distance += DISTANCE_MATRIX[chromosome[i]][chromosome[i+1]];
-            } else {
-
-                distance += DISTANCE_MATRIX[chromosome[i]][chromosome[0]];
-            }
+        for (int i = 0; i < chromosomeLength; i++) {
+            // 如果当前索引是染色体的最后一个元素，那么下一个索引应该是0，否则就是当前索引加1
+            int nextIndex = (i == chromosomeLength - 1) ? 0 : i + 1;
+            distance += DISTANCE_MATRIX[chromosome[i]][chromosome[nextIndex]];
         }
-
 
         return distance;
     }
