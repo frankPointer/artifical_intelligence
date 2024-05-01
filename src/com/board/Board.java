@@ -23,4 +23,21 @@ public class Board {
             }
         }
     }
+
+    /**
+     * 判断当前状态是不是目标状态
+     * @return 是返回true，否则返回false
+     */
+    boolean isTargetStatus() {
+        // todo 设置目标状态
+        int target[][] = {{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
+
+        for (int i = 0; i < 9; i++) {
+            if (board[i / 3][i % 3] != target[i / 3][i % 3]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
