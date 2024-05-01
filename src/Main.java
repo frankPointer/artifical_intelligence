@@ -5,10 +5,6 @@ import com.genetic.Population;
 
 import java.util.Arrays;
 
-/**
- * @Date: 2024-03-29-11:57
- * @Description:
- */
 public class Main {
     public static void main(String[] args) {
         // 创建初始种群
