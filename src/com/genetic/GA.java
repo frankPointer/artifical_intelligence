@@ -4,7 +4,8 @@ import java.util.Random;
 
 /**
  * @Date: 2024-04-28-18:49
- * @Description: 用来完成选择变异交叉
+ * @Description: 用来完成选择变异交叉的工具类，实现了基于锦标赛选择法的选择、基于OX交叉法的交叉和基于次序的变异
+ * 使用方法：GA.getNextPopulation(Population population)
  */
 public class GA {
     /**
