@@ -12,24 +12,10 @@
    2. 创建子节点的时候，使用 ID3 的第二个构造方法：`public ID3(ArrayList<String[]> originData, ArrayList<String> attributes, String attribute, String label)`
       继承其他ID3 的数据，并加一些限制条件
 
+---
 
-根据测试数据输出结果如下：
+输出结果：
 
-```java
-public static void main(String[] args) throws IOException {
-
-        String filePath = "resources/test_data.txt";
-        ID3 id3 = new ID3(filePath);
-
-        TreeNode decisionTree = TreeNode.createDecisionTree(id3);
-
-        decisionTree.levelOrderTraversal();
-
-        System.out.println("----------------------------");
-
-        decisionTree.levelOrderTraversalAttributes();
-    }
-```
 ```
 纹理
 触感 坏瓜 根蒂
@@ -44,6 +30,26 @@ public static void main(String[] args) throws IOException {
 ```
 图片数据如下
 ![](https://picgo-1314080015.cos.ap-nanjing.myqcloud.com/PIctures/202403301756268.png)
+
+---
+
+测试代码
+
+```java
+public static void main(String[]args)throws IOException{
+
+        String filePath="resources/test_data.txt";
+        ID3 id3=new ID3(filePath);
+
+        TreeNode decisionTree=TreeNode.createDecisionTree(id3);
+
+        decisionTree.levelOrderTraversal();
+
+        System.out.println("----------------------------");
+
+        decisionTree.levelOrderTraversalAttributes();
+        }
+```
 
 # 遗传算法
 
@@ -75,6 +81,8 @@ public static void main(String[] args) throws IOException {
   4. 交叉完成之后通过方法 `performMutation`来变异
      1. 使用 `mutation` 来对单个个体的染色体进行变异
   5. 变异完成之后生成一个新的 `Population` 返回
+
+---
 
 Main 测试类
 ```java
@@ -154,3 +162,24 @@ public class Main {
   - 计算从当前状态出发能到达的状态
 
 Puzzle类：实现逻辑部分
+
+- 启发式搜索函数
+- 打印棋盘移动路径函数
+
+---
+
+测试代码：粘贴到 Main.java 使用
+
+```java
+import com.puzzle.Puzzle;
+
+public class Main {
+    public static void main(String[] args) {
+        int[] initial = {2, 8, 3, 1, 6, 4, 7, 0, 5};
+        Puzzle puzzle = new Puzzle(initial);
+        puzzle.solve();
+        puzzle.printSolution();
+    }
+}
+```
+
