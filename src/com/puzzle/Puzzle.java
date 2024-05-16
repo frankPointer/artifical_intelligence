@@ -20,4 +20,26 @@ public class Puzzle {
         explored = new HashSet<>();
         queue.add(new State(initial, goal));
     }
+
+    /**
+     * 启发式搜索算法
+     * 1. 从优先队列中取出一个状态
+     * 2. 判断是否为目标状态，是则结束
+     * 3. 否则生成下一个状态，如果没有探索过则加入队列
+     */
+    public void solve() {
+        while (!queue.isEmpty()) {
+            State current = queue.poll();
+            explored.add(current);
+            if (current.isGoal()) {
+                solution = current;
+                break;
+            }
+            for(State next : current.generateNextStates()) {
+                if(!explored.contains(next)) {
+                    queue.add(next);
+                }
+            }
+        }
+    }
 }
