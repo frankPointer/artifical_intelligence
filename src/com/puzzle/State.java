@@ -8,7 +8,7 @@ import java.util.List;
  * @Date: 2024-05-16-21:18
  * @Description: 计算状态的启发式距离以及生成下一个状态
  */
-public class State {
+public class State implements Comparable<State> {
     private final int[] goal;
     public int[] board;
     public int distance;
@@ -57,7 +57,7 @@ public class State {
             if (newZeroPos >= 0 && newZeroPos < 9 && !(zeroPos == 2 && newZeroPos == 3) && !(zeroPos == 3 && newZeroPos == 2) && !(zeroPos == 5 && newZeroPos == 6) && !(zeroPos == 6 && newZeroPos == 5)) {
                 int[] newBoard = Arrays.copyOf(board, board.length);
                 swap(newBoard, zeroPos, newZeroPos);
-                State newState = new State(newBoard,goal);
+                State newState = new State(newBoard, goal);
 
                 // 保存此状态的上个状态，用于最后输出移动路径
                 newState.previous = this;
@@ -72,5 +72,23 @@ public class State {
         int temp = board[i];
         board[i] = board[j];
         board[j] = temp;
+    }
+
+    @Override
+    public int compareTo(State other) {
+        return Integer.compare(this.distance, other.distance);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        State state = (State) o;
+        return Arrays.equals(board, state.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(board);
     }
 }
