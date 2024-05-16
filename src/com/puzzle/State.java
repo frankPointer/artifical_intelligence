@@ -58,6 +58,8 @@ public class State {
                 int[] newBoard = Arrays.copyOf(board, board.length);
                 swap(newBoard, zeroPos, newZeroPos);
                 State newState = new State(newBoard,goal);
+
+                // 保存此状态的上个状态，用于最后输出移动路径
                 newState.previous = this;
                 nextStates.add(newState);
             }
