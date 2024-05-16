@@ -64,6 +64,7 @@ public class Puzzle {
                 }
                 System.out.println("------");
             }
+            System.out.println("Total steps: " + (steps.size() - 1));
         } else {
             System.out.println("No solution found!");
         }
