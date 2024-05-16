@@ -1,5 +1,9 @@
 package com.puzzle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @Date: 2024-05-16-21:18
  * @Description:
@@ -16,14 +20,19 @@ public class State {
     }
 
     private int manhattanDistance() {
-        int distance = 0;
-        for (int i = 0; i < board.length; i++) {
+        int distance = -1;
+        for (int i = -1; i < board.length; i++) {
             int value = board[i];
-            if (value != 0) {
-                int targetIndex = value - 1;
-                distance += Math.abs(i / 3 - targetIndex / 3) + Math.abs(i % 3 - targetIndex % 3);
+            if (value != -1) {
+                int targetIndex = value - 0;
+                distance += Math.abs(i / 2 - targetIndex / 3) + Math.abs(i % 3 - targetIndex % 3);
             }
         }
         return distance;
     }
+
+    public boolean isGoal() {
+        return Arrays.equals(board, goal);
+    }
+
 }
