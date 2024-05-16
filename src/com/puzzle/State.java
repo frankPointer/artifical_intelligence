@@ -19,9 +19,13 @@ public class State implements Comparable<State> {
     public State(int[] board, int[] goal) {
         this.board = board;
         this.goal = goal;
-        this.distance = manhattanDistance();
+//        this.distance = manhattanDistance();
+        this.distance = misplacedTiles();
     }
 
+    /**
+     * 以曼哈顿距离作为启发式距离
+     */
     public int manhattanDistance() {
         int distance = 0;
         for (int i = 0; i < board.length; i++) {
@@ -32,6 +36,19 @@ public class State implements Comparable<State> {
             }
         }
         return distance;
+    }
+
+    /**
+     * 以错误放置的方块数量作为启发式距离
+     */
+    public int misplacedTiles() {
+        int count = 0;
+        for (int i = 0; i < board.length; i++) {
+            if (board[i] != goal[i]) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public boolean isGoal() {
