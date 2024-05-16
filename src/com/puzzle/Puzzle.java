@@ -1,7 +1,6 @@
 package com.puzzle;
 
-import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * @Date: 2024-05-16-21:20
@@ -35,13 +34,39 @@ public class Puzzle {
                 solution = current;
                 break;
             }
-            for(State next : current.generateNextStates()) {
-                if(!explored.contains(next)) {
+            for (State next : current.generateNextStates()) {
+                if (!explored.contains(next)) {
                     queue.add(next);
                 }
             }
         }
     }
 
+    public void printSolution() {
+        if (solution != null) {
+            List<State> steps = new ArrayList<>();
+            State current = solution;
+            while (current != null) {
+                steps.add(current);
+                current = current.previous;
+            }
+
+            // 对路径进行反转，从初始状态到目标状态
+            Collections.reverse(steps);
+
+            for (State step : steps) {
+                int[] board = step.board;
+                for (int i = 0; i < board.length; i++) {
+                    System.out.print(board[i] + " ");
+                    if (i % 3 == 2) {
+                        System.out.println();
+                    }
+                }
+                System.out.println("------");
+            }
+        } else {
+            System.out.println("No solution found!");
+        }
+    }
 
 }
